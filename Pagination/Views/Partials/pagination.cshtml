@@ -1,0 +1,84 @@
+@inherits UmbracoViewPage<CAS.Core.Models.PaginationDetails>
+
+
+
+
+
+
+
+<ul class="paging">
+
+    @{
+
+        var lastPage = Convert.ToInt32(Math.Ceiling(Model.TotalResults / Convert.ToDecimal(Model.PageSize)));
+
+        var startNumber = Model.CurrentPage < 3 ? 1 : Model.CurrentPage - 2;
+        var endNumber = Model.LastPage > Model.CurrentPage + 2 ? Model.CurrentPage + 2 : lastPage;
+        if (endNumber < 5)
+        {
+            startNumber = 1;
+        }
+        if (endNumber > 5 && endNumber - startNumber < 5)
+        {
+            startNumber = endNumber - 4;
+        }
+        if (endNumber < 5 && lastPage > 5)
+        {
+            endNumber = 5;
+        }
+    }
+
+    @if (startNumber > 1)
+    {
+        <li class="@(Model.CurrentPage == 1 ? "active" : string.Empty)">
+            @if (Model.CurrentPage > 1)
+            {
+                <a href='#' data-page='1'>1</a>
+            }
+            else
+            {
+                <span>1</span>
+            }
+        </li>
+    }
+    @if (startNumber > 3)
+    {
+        <li><a href="#" data-page="@(startNumber-1)">...</a></li>
+    }
+    @for (var p = startNumber; p <= endNumber; p++)
+    {
+        <li class="@(Model.CurrentPage == p ? "active" : string.Empty)">
+            @if (Model.CurrentPage != p)
+            {
+                <a href='#' data-page='@p'>@p</a>
+            }
+            else
+            {
+                <span>@p</span>
+            }
+        </li>
+
+    }
+
+    @if (endNumber < (lastPage - 2))
+    {
+        <li><a href="#" data-page="@(endNumber + 1)">...</a></li>
+    }
+    @if (endNumber < lastPage)
+    {
+        <li class="@(Model.CurrentPage == lastPage ? "active" : string.Empty) m">
+
+            @if (Model.CurrentPage < lastPage)
+            {
+                <a href='#' data-page='@lastPage'>@lastPage</a>
+            }
+            else
+            {
+                <span>@lastPage</span>
+            }
+
+         
+        </li>
+
+    }
+</ul>
